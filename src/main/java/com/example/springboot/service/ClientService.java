@@ -9,4 +9,6 @@ public interface ClientService {
     Client update(Client client);
 
     Client get(Long id);
+
+    List<Client> getAll();
 }

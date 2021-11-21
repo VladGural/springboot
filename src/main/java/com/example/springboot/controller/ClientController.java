@@ -28,4 +28,11 @@ public class ClientController {
     public ClientResponseDto create(@RequestBody CreateClientRequestDto requestDto) {
         return clientMapper.ModelToDto(clientService.add(clientMapper.createDtoToModel(requestDto)));
     }
+
+    @GetMapping
+    public List<ClientResponseDto> getAll() {
+        return clientService.getAll().stream()
+                .map(clientMapper::ModelToDto)
+                .collect(Collectors.toList());
+    }
 }

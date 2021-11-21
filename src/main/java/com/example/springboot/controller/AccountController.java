@@ -1,0 +1,42 @@
+package com.example.springboot.controller;
+
+import com.example.springboot.dto.AccountResponseDto;
+import com.example.springboot.dto.CreateAccountRequestDto;
+import com.example.springboot.model.Account;
+import com.example.springboot.model.Client;
+import com.example.springboot.service.AccountService;
+import com.example.springboot.service.ClientService;
+import com.example.springboot.service.mapper.AccountMapper;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/account")
+public class AccountController {
+    private final AccountMapper accountMapper;
+    private final AccountService accountService;
+    private final ClientService clientService;
+
+    public AccountController(AccountMapper accountMapper,
+                             AccountService accountService,
+                             ClientService clientService) {
+        this.accountMapper = accountMapper;
+        this.accountService = accountService;
+        this.clientService = clientService;
+    }
+
+    @PostMapping("/add/{id}")
+    public AccountResponseDto add(@PathVariable Long id,
+                                  @RequestBody CreateAccountRequestDto createAccountRequestDto) {
+        Account account = accountMapper.createDtoToModel(createAccountRequestDto);
+        accountService.add(account);
+        Client client = clientService.get(id);
+        client.getAccounts().add(account);
+        clientService.add(client);
+        return accountMapper.ModelToDto(account);
+    }
+}
