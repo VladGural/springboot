@@ -4,6 +4,7 @@ import com.example.springboot.dto.AccountResponseDto;
 import com.example.springboot.dto.ClientResponseDto;
 import com.example.springboot.dto.CreateClientRequestDto;
 import com.example.springboot.model.Client;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -28,10 +29,13 @@ public class ClientMapper {
         responseDto.setId(client.getId());
         responseDto.setFirstName(client.getFirstName());
         responseDto.setLastName(client.getLastName());
-        List<AccountResponseDto> accountResponseDtoList =
-                client.getAccounts().stream()
-                .map(accountMapper::ModelToDto)
-                .collect(Collectors.toList());
+        List<AccountResponseDto> accountResponseDtoList = Collections.emptyList();
+        if (client.getAccounts() != null) {
+            accountResponseDtoList =
+                    client.getAccounts().stream()
+                            .map(accountMapper::ModelToDto)
+                            .collect(Collectors.toList());
+        }
         responseDto.setAccounts(accountResponseDtoList);
         return responseDto;
     }

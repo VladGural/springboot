@@ -1,17 +1,20 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.dto.AccountResponseDto;
+import com.example.springboot.dto.ClientResponseDto;
 import com.example.springboot.dto.CreateAccountRequestDto;
+import com.example.springboot.dto.OwnerDto;
 import com.example.springboot.model.Account;
 import com.example.springboot.model.Client;
 import com.example.springboot.service.AccountService;
 import com.example.springboot.service.ClientService;
 import com.example.springboot.service.mapper.AccountMapper;
+import com.example.springboot.service.mapper.ClientMapper;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,13 +23,16 @@ public class AccountController {
     private final AccountMapper accountMapper;
     private final AccountService accountService;
     private final ClientService clientService;
+    private final ClientMapper clientMapper;
 
     public AccountController(AccountMapper accountMapper,
                              AccountService accountService,
-                             ClientService clientService) {
+                             ClientService clientService,
+                             ClientMapper clientMapper) {
         this.accountMapper = accountMapper;
         this.accountService = accountService;
         this.clientService = clientService;
+        this.clientMapper = clientMapper;
     }
 
     @PostMapping("/add/{id}")
@@ -38,5 +44,11 @@ public class AccountController {
         client.getAccounts().add(account);
         clientService.add(client);
         return accountMapper.ModelToDto(account);
+    }
+
+    @GetMapping("/owner/{id}")
+    public OwnerDto getOwner(@PathVariable Long id) {
+        OwnerDto owner = accountService.getOwner(id);
+        return owner;
     }
 }
