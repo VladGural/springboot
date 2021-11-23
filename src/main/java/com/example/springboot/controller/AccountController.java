@@ -1,16 +1,13 @@
 package com.example.springboot.controller;
 
 import com.example.springboot.dto.AccountResponseDto;
-import com.example.springboot.dto.ClientResponseDto;
 import com.example.springboot.dto.CreateAccountRequestDto;
-import com.example.springboot.dto.OwnerDto;
 import com.example.springboot.model.Account;
 import com.example.springboot.model.Client;
 import com.example.springboot.service.AccountService;
 import com.example.springboot.service.ClientService;
 import com.example.springboot.service.mapper.AccountMapper;
 import com.example.springboot.service.mapper.ClientMapper;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,17 +35,10 @@ public class AccountController {
     @PostMapping("/add/{id}")
     public AccountResponseDto add(@PathVariable Long id,
                                   @RequestBody CreateAccountRequestDto createAccountRequestDto) {
-        Account account = accountMapper.createDtoToModel(createAccountRequestDto);
-        accountService.add(account);
         Client client = clientService.get(id);
-        client.getAccounts().add(account);
-        clientService.add(client);
+        Account account = accountMapper.createDtoToModel(createAccountRequestDto);
+        account.setClient(client);
+        accountService.add(account);
         return accountMapper.ModelToDto(account);
-    }
-
-    @GetMapping("/owner/{id}")
-    public OwnerDto getOwner(@PathVariable Long id) {
-        OwnerDto owner = accountService.getOwner(id);
-        return owner;
     }
 }

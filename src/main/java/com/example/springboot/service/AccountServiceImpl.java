@@ -1,8 +1,6 @@
 package com.example.springboot.service;
 
-import com.example.springboot.dto.OwnerDto;
 import com.example.springboot.model.Account;
-import com.example.springboot.model.Client;
 import com.example.springboot.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +20,5 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account get(Long id) {
         return accountRepository.findById(id).get();
-    }
-
-    @Override
-    public OwnerDto getOwner(Long id) {
-        return accountRepository.getOwner(id);
     }
 }

@@ -19,7 +19,7 @@ public class Client {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @OneToMany
+    @OneToMany(mappedBy = "client")
     private List<Account> accounts;
 
     public Long getId() {
